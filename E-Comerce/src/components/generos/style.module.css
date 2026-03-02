@@ -1,0 +1,148 @@
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+::-webkit-scrollbar{
+    display: none;
+}
+
+.main{
+    width: 100vw;
+    height: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 4rem;
+    overflow-x: hidden;
+}
+
+.searchContainer{
+    width: 100%;
+    height: auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;  
+}
+
+.searchContainer input{
+    
+}
+
+.searchContainer button{
+    position: relative;
+    left: 2rem;
+    top: 0.1rem;
+    background-color: transparent;
+    border: none;
+}
+
+.searchBar{
+    width: 800px;
+    height: 50px;
+    padding: 1rem;
+    background-color: #6251DD33;
+    border: none;
+}
+
+.generoContainer{
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    width: 1440px ; 
+    margin-top: 4rem;
+    margin-left: 7rem;
+
+}
+
+.generoContainer .header{
+    width: 100%;
+    height: 33px;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: #090937;
+}
+
+.booksContainer{
+    width: 100%;
+    height: auto;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 3rem;
+}
+
+.book{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    width: 300px;
+    height: 433px;
+    gap: 3rem;
+    padding: 1rem;
+    background-color: #F4F4FF;
+    border-radius: 5px;
+    border: solid 1px #0909371A
+}
+
+.bookImage{
+    width: 200px;
+    height: 300px;
+    object-fit: contain;
+    align-self: center;
+    box-shadow: 0px 4px 8px #6251DD33;
+
+}
+
+.bookImage img{
+    width: 100%;
+    height: 100%;
+}
+
+.bookInfo{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.bookInfoHeader{
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+
+}
+
+.titulo{
+    width: 100%;
+    font-weight: 600;
+    color: #090937;
+    
+}
+
+.autor{
+    width: 100%;
+    font-weight: 600;
+    color: #09093799;
+}
+
+.bookInfoPrice{
+
+    font-weight: 700;
+    color: #6251DD;
+
+}
+
+.fonteNormal{
+    font-size: 1rem;
+}
+
+.fonteMedia{
+    font-size: 0.85rem;
+}
+
+.fontePequena{
+    font-size: 0.75rem;
+}
