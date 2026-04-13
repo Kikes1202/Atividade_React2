@@ -1,43 +1,16 @@
-import { useEffect, useState } from "react";
-import axios from "axios"
+import useBookData from "../../hooks/usebooksData";
 import Header from "../../componentes/header/header";
 import style from "./style.module.css"
 import  banner from "../../assets/Banner Area.png"
 import { Link } from "react-router-dom";
 
-interface Generos{
-    id: number,
-    genero: string
-}
-
-interface Livros{
-    id: number,
-    titulo: string,
-    autor: string,
-    genero: string,
-    preco: string
-    sinopse: string,
-    capa: string,
-
-}
-
 
 
 
 export default function Home(){
-    const[cardInfo, setCardInfo] = useState<Generos[]>([])
-    const[livroInfo, setLivroInfo] = useState<Livros[]>([])
+    const {data: livroInfo = [], isLoading, isError} = useBookData();
+    const cardInfo = [...new Set(livroInfo.map(livro => livro.genero))]
     
-    useEffect(() => {
-        axios.get("http://localhost:3000/livros")
-        .then(response => (setLivroInfo(response.data)))
-        .catch(error => (console.error(`Erro: ${error}`)))
-
-        axios.get("http://localhost:3000/generos")
-        .then(response => (setCardInfo(response.data)))
-        .catch(error => (console.error(`Erro: ${error}`)))
-    }, [])
-
 
     function quatroLivros(genero: string){
         let i: number;
@@ -61,15 +34,21 @@ export default function Home(){
                 <img src={banner} alt="banner" />
             </div>
 
-            {cardInfo.map((item) => (
-                <div className={style.generosContainer} key={item.id}>
-                    <div className={style.header}>
-                        <h1 style={{color: "#090937"}}>{item.genero}</h1>
-                        <Link to= {`/generos/${item.id}`} className={style.verMais}>{"Ver Mais"}</Link>
-                    </div>
+            {cardInfo.map((genero) => (
+                <div className={style.generosContainer} key={genero}>
+                    {!isLoading && 
+                        <>
+                            <div className={style.header}>
+                                <h1 style={{color: "#090937"}}>{genero}</h1>
+                                <Link to= {`/generos/${genero}`} className={style.verMais}>{"Ver Mais"}</Link>
+                            </div>
+                        </>
+                    }
 
                     <div className={style.livrosWrapper}>
-                        {quatroLivros(item.genero).map((info) => (
+                    {!isLoading &&
+                        <>
+                            {quatroLivros(genero).map((info) => (
                             <Link to={`/bookDetails/${info.id}`} className={style.livrosContainer} key={info.titulo}>
                                 <div className={style.imgContainer}>
                                     <img src={info.capa} alt="capa" />
@@ -84,7 +63,9 @@ export default function Home(){
                                     </div>
                                 </div>
                             </Link>
-                        ))}
+                            ))}
+                        </>
+                    }
 
                     </div>
 
@@ -92,6 +73,8 @@ export default function Home(){
                 </div>
                 
             ))}
+            {isLoading && <p>Carregando...</p>}
+            {isError && <p>Erro!</p>}
 
 
         </main>

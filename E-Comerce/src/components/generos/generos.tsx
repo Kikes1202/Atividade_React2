@@ -1,40 +1,23 @@
-import {useEffect, useState} from "react"
+import useBookData from "../../hooks/usebooksData";
+import {useState} from "react"
 import { useParams } from "react-router-dom";
 import { Link } from "react-router-dom";
 import Header from "../../componentes/header/header";
 import style from "./style.module.css"
-import axios from "axios";
 import lupa from "../../assets/Search.svg"
+import type { BookData } from "../../types/book-data";
 
-interface Livros{
-    id: number,
-    titulo: string,
-    autor: string,
-    genero: string,
-    preco: string
-    sinopse: string,
-    capa: string,
-}
+
 
 
 export default function ListaGeneros(){
-    const[resultado, setResultado] = useState<Livros[]>([])
+    const[resultado, setResultado] = useState<BookData[]>([])
     const[palavra, _setPalavra] = useState('')
-    const{id} = useParams();
-    const[genero, setGenero] = useState('')
-    const[livroInfo, setLivroInfo] = useState<Livros[]>([])
+    const { genero = ""} = useParams();
+    const { data: livroInfo = [], isLoading, isError } = useBookData();
 
-    useEffect(() => {
-        axios.get("http://localhost:3000/livros")
-        .then(response => (setLivroInfo(response.data)))
-        .catch(error => (console.error(`Erro: ${error}`)))
 
-        axios.get(`http://localhost:3000/generos/${id}`)
-        .then(response => (setGenero(response.data.genero)))
-        .catch(error => (console.error(`Erro: ${error}`)))
 
-        
-    }, [id])
 
 
     function filtrarGenero(genero: string){
@@ -103,7 +86,9 @@ export default function ListaGeneros(){
                             <h2>{genero}</h2>
                         </div>
                         <div className={style.booksContainer}>
-                            {(resultado.length > 0 ? resultado : filtrarGenero(genero)).map((info) => (
+                            {!isLoading &&
+                                <>
+                                {(resultado.length > 0 ? resultado : filtrarGenero(genero)).map((info) => (
                                 <Link to={`/bookDetails/${info.id}`} className={style.book} key={info.titulo}>
                                     <div className={style.bookImage}>
                                         <img src={info.capa} alt="Capa" />
@@ -117,6 +102,10 @@ export default function ListaGeneros(){
                                     </div>
                                 </Link>
                             ))}
+                                </>
+                            }
+                            {isLoading && <p>Carregando...</p>}
+                            {isError && <p>Erro!</p>}
                         </div>
                     </div>
 

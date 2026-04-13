@@ -1,40 +1,17 @@
-import { useState, useEffect } from "react";
+import useBookData from "../../hooks/usebooksData";
 import style from  './style.module.css'
 import Header from "../../componentes/header/header";
 import { useParams } from "react-router-dom";
-import axios from "axios";
 import { Link } from "react-router-dom";
 
-interface Livros{
-    id: number,
-    titulo: string,
-    autor: string,
-    genero: string,
-    preco: string
-    sinopse: string,
-    capa: string,
-}
+
 
 
 export default function DetalhesLivros(){
-    const{id} = useParams();
-    const[infoLivro, setinfoLivro] = useState<Livros>({
+    const {id} = useParams();
+    const { data: livroInfo = [], isLoading, isError } = useBookData();
+    const livro = livroInfo.find(livro => livro.id)
 
-        id: 0,
-        titulo: '',
-        autor: '',
-        genero: '',
-        preco: '',
-        sinopse: '',
-        capa: '',
-
-    })
-
-    useEffect(() => {
-        axios.get(`http://localhost:3000/livros/${id}`)
-        .then(response => (setinfoLivro(response.data)))
-        .catch(error => (console.error(`Erro: ${error}`)))
-    }, [id])
 
     return(
         <>
@@ -48,26 +25,28 @@ export default function DetalhesLivros(){
                         <h2 style={{marginTop: "1.5rem"}}>Detalhes do Livro</h2>
                     </Link>
                 </div>
-
-                    {infoLivro && (
+                {!isLoading &&
+                    <>
+                    
+                    {livroInfo && (
                     <div className={style.livroContainer}>
                         <div className={style.cover}>
                             <div className={style.imgWrapper}>
-                                <img src={infoLivro.capa} alt="" />
+                                <img src={livro?.capa} alt="" />
                             </div>
                         </div>
                         <div className={style.info}>
                             <div className={style.header}>
-                                <h1>{infoLivro.titulo}</h1>
-                                <h2>{infoLivro.autor}</h2>
+                                <h1>{livro?.titulo}</h1>
+                                <h2>{livro?.autor}</h2>
                             </div>
                             <div className={style.sinopse}>
                                 <h3>Sinopse</h3>
-                                {infoLivro.sinopse}
+                                {livro?.sinopse}
                             </div>
 
                             <div className={style.addCart}>
-                                {`R$ ${infoLivro.preco}`}
+                                {`R$ ${livro?.preco}`}
                                 <label style={{fontWeight: "600", color: "white"}}>
                                     {"Adicionar ao carrinho"}
                                     <input onClick={() => console.log("clicked")} style={{display: "none"}} type="checkbox" />
@@ -78,7 +57,9 @@ export default function DetalhesLivros(){
 
                     </div>
                     )}
-            
+                    </>}
+                {isLoading && <p>Carregando...</p>}
+                {isError && <p>Erro!</p>}
 
             </main>
         </>
