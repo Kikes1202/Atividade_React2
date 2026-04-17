@@ -10,7 +10,7 @@ import { Link } from "react-router-dom";
 export default function DetalhesLivros(){
     const {id} = useParams();
     const { data: livroInfo = [], isLoading, isError } = useBookData();
-    const livro = livroInfo.find(livro => livro.id)
+    const livro = livroInfo.find(livro => String(livro.id) === String(id))
 
 
     return(
